@@ -23,7 +23,7 @@ import org.springframework.util.Assert;
 @Component("taskThreadAdapter")
 public class TaskThreadAdapter {
 
-	public volatile boolean exit = false;
+	private volatile boolean exit = false;
 
 	private TaskQueue taskQueue;
 
@@ -32,6 +32,14 @@ public class TaskThreadAdapter {
 	@Autowired
 	public void setTaskQueue(TaskQueue taskQueue) {
 		this.taskQueue = taskQueue;
+	}
+
+	public boolean isExit() {
+		return exit;
+	}
+
+	public void setExit(boolean exit) {
+		this.exit = exit;
 	}
 
 	/**

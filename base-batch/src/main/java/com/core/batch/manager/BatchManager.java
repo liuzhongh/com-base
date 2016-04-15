@@ -70,7 +70,7 @@ public class BatchManager
 
 		public void stopServer()
 		{
-			taskThreadAdapter.exit = true;
+			taskThreadAdapter.setExit(true);
 		}
 	}
 	
