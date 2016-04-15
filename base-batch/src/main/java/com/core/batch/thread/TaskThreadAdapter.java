@@ -99,7 +99,12 @@ public class TaskThreadAdapter {
 		int counter = 0;
 		
 		for(;;)
-		{			
+		{
+			if(ThreadPoolManager.getInstance().isEmpty() && exit) {
+				log.info("接收到退出命令,线程即将退出!");
+				break;
+			}
+
 			try {
 				log.info("当前线程轮循周期为：" + cycleTime + "(ms).");
 				Thread.sleep(cycleTime);
@@ -111,11 +116,6 @@ public class TaskThreadAdapter {
 			{
 				List<BatchTaskDTO> tasks = taskQueue.processTaskQueue();
 
-				if(UtilHelper.isEmpty(tasks) && exit) {
-					log.info("接收到退出命令,线程即将退出!");
-					break;
-				}
-				
 				if(UtilHelper.isEmpty(tasks)) {
 					counter++;
 
