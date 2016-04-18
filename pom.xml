@@ -19,6 +19,12 @@
         <jdk.version>1.8</jdk.version>
         <maven.compiler.plugin.version>3.1</maven.compiler.plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.plugin.version>3.1</maven.compiler.plugin.version>
+        <maven.resources.plugin.version>2.7</maven.resources.plugin.version>
+        <maven.javadoc.plugin.version>2.10.3</maven.javadoc.plugin.version>
+        <maven.appassembler.plugin>1.8.1</maven.appassembler.plugin>
+        <build.jvmArguments>-Xms1024m -Xmx2048m</build.jvmArguments>
+        <build.mainClass>com.core.demo.main.DemoMain</build.mainClass>
         <org.slf4j.version>1.7.15</org.slf4j.version>
         <mybatis.version>3.2.2</mybatis.version>
         <spring.version>4.2.4.RELEASE</spring.version>
@@ -85,6 +91,23 @@
     </dependencyManagement>
 
     <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+
+        <sourceDirectory>src/main/java</sourceDirectory >
+        <testSourceDirectory>src/test/java</testSourceDirectory>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+        </testResources>
+        <outputDirectory>target/classes</outputDirectory>
+        <testOutputDirectory>target/test-classes</testOutputDirectory>
+
         <plugins>
             <!-- 编译插件及其jdk版本指定 -->
             <plugin>
@@ -97,7 +120,119 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
+
+            <!-- 资源文件插件，缺失将无法正常编译资源文件目录 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven.resources.plugin.version}</version>
+                <configuration>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven.javadoc.plugin.version}</version>
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <charset>${project.build.sourceEncoding}</charset>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <docencoding>${project.build.sourceEncoding}</docencoding>
+                    <useStandardDocletOptions>false</useStandardDocletOptions>
+                    <aggregate>true</aggregate>
+                </configuration>
+            </plugin>
         </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <configuration>
+                        <excludes>
+                            <exclude>**/*.xml</exclude>
+                            <exclude>**/*.properties</exclude>
+                        </excludes>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>appassembler-maven-plugin</artifactId>
+                    <version>${maven.appassembler.plugin}</version>
+                    <executions>
+                        <execution>
+                            <id>generate-jsw-scripts</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>generate-daemons</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <configurationDirectory>conf</configurationDirectory>
+                        <repositoryLayout>flat</repositoryLayout>
+                        <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
+                        <configurationSourceDirectory>src/main/resources</configurationSourceDirectory>
+                        <copyConfigurationDirectory>true</copyConfigurationDirectory>
+                        <assembleDirectory>${project.build.directory}/${project.artifactId}-${project.version}</assembleDirectory>
+                        <target>${project.build.directory}</target>
+                        <extraJvmArguments>${build.jvmArguments}</extraJvmArguments>
+                        <logsDirectory>logs</logsDirectory>
+                        <daemons>
+                            <daemon>
+                                <id>${project.artifactId}</id>
+                                <mainClass>${build.mainClass}</mainClass>
+                                <commandLineArguments>
+                                    <commandLineArgument>start</commandLineArgument>
+                                </commandLineArguments>
+                                <platforms>
+                                    <platform>jsw</platform>
+                                </platforms>
+                                <generatorConfigurations>
+                                    <generatorConfiguration>
+                                        <generator>jsw</generator>
+                                        <includes>
+                                            <include>linux-x86-64</include>
+                                            <!--<include>linux-x86-32</include>
+                                            <include>windows-x86-32</include>
+                                            <include>windows-x86-64</include>-->
+                                        </includes>
+                                        <configuration>
+                                            <property>
+                                                <name>configuration.directory.in.classpath.first</name>
+                                                <value>conf</value>
+                                            </property>
+                                            <property>
+                                                <name>set.default.REPO_DIR</name>
+                                                <value>lib</value>
+                                            </property>
+                                            <property>
+                                                <name>wrapper.logfile</name>
+                                                <value>logs/${project.artifactId}-wrapper.log</value>
+                                            </property>
+                                        </configuration>
+                                    </generatorConfiguration>
+                                </generatorConfigurations>
+                            </daemon>
+                        </daemons>
+
+                        <repositoryName>lib</repositoryName>
+                    </configuration>
+
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
 </project>

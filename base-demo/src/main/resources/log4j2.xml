@@ -2,7 +2,7 @@
 <!-- status=debug 可以查看log4j的装配过程 -->
 <configuration status="ERROR" monitorInterval="3" shutdownHook="disable">
     <properties>
-        <property name="LOG_HOME">log</property>
+        <property name="LOG_HOME">logs</property>
         <!-- 日志备份目录 -->
         <property name="BACKUP_HOME">{LOG_HOME}/backup</property>
         <property name="STAT_NAME">stat</property>
