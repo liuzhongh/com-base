@@ -221,6 +221,10 @@
                                                 <name>wrapper.logfile</name>
                                                 <value>logs/${project.artifactId}-wrapper.log</value>
                                             </property>
+                                            <property>
+                                                <name>wrapper.logfile.format</name>
+                                                <value>M</value>
+                                            </property>
                                         </configuration>
                                     </generatorConfiguration>
                                 </generatorConfigurations>
