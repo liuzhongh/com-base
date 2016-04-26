@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!-- 
+ **
+ * COPYRIGHT (C) 2016 Fky. ALL RIGHTS RESERVED.
+ *
+ * No part of this publication may be reproduced, stored in a retrieval system,
+ * or transmitted, on any form or by any means, electronic, mechanical, photocopying,
+ * recording, or otherwise, without the prior written permission of Fky.
+ *
+ * Created By: Liuzh
+ * Created On: 2016-4-26 11:04:19
+ *
+ * Amendment History:
+ * 
+ * Amended By       Amended On      Amendment Description
+ * ************     ***********     *********************************************
+ *
+ **
+ -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shangkang.mapper.BatchTaskExceptionLogMapper">
+	<resultMap id="BatchTaskExceptionLogResultMapper" type="BatchTaskExceptionLog">
+		<result column="TASK_EXCEPTION_OID" property="taskExceptionOid"/>
+		<result column="TASK_OID" property="taskOid"/>
+		<result column="EXCEPTION_MESSAGE" property="exceptionMessage"/>
+		<result column="EXCEPTION_STACK_MESSAGE" property="exceptionStackMessage"/>
+		<result column="CREATE_BY" property="createBy"/>
+		<result column="CREATE_DATE" property="createDate"/>
+		<result column="UPDATE_BY" property="updateBy"/>
+		<result column="UPDATE_DATE" property="updateDate"/>
+	</resultMap>
+	
+	<sql id="commonColumns">
+		 TASK_EXCEPTION_OID
+		, TASK_OID
+		, EXCEPTION_MESSAGE
+		, EXCEPTION_STACK_MESSAGE
+		, CREATE_BY
+		, CREATE_DATE
+		, UPDATE_BY
+		, UPDATE_DATE
+	</sql>
+
+	<sql id="commonColumnsNotPK">
+		 TASK_OID
+		, EXCEPTION_MESSAGE
+		, EXCEPTION_STACK_MESSAGE
+		, CREATE_BY
+		, CREATE_DATE
+		, UPDATE_BY
+		, UPDATE_DATE
+	</sql>
+	
+	<sql id="commonProcessDateColumns">
+		 TASK_EXCEPTION_OID
+		, TASK_OID
+		, EXCEPTION_MESSAGE
+		, EXCEPTION_STACK_MESSAGE
+		, CREATE_BY
+		, date_format(CREATE_DATE, '%Y-%m-%d %H:%i:%s') CREATE_DATE
+		, UPDATE_BY
+		, date_format(UPDATE_DATE, '%Y-%m-%d %H:%i:%s') UPDATE_DATE
+	</sql>
+	
+	<sql id="commonCondition">
+		<if test="taskExceptionOid!= null and taskExceptionOid!= ''"> 
+			AND TASK_EXCEPTION_OID=#{taskExceptionOid}
+		</if>
+		<if test="taskOid!= null and taskOid!= ''"> 
+			AND TASK_OID=#{taskOid}
+		</if>
+		<if test="exceptionMessage!= null and exceptionMessage!= ''"> 
+			AND EXCEPTION_MESSAGE=#{exceptionMessage}
+		</if>
+		<if test="exceptionStackMessage!= null and exceptionStackMessage!= ''"> 
+			AND EXCEPTION_STACK_MESSAGE=#{exceptionStackMessage}
+		</if>
+		<if test="createBy!= null and createBy!= ''"> 
+			AND CREATE_BY=#{createBy}
+		</if>
+		<if test="createDate!= null and createDate!= ''"> 
+			AND CREATE_DATE=str_to_date(#{createDate},'%Y-%m-%d %H:%i:%s')
+		</if>
+		<if test="updateBy!= null and updateBy!= ''"> 
+			AND UPDATE_BY=#{updateBy}
+		</if>
+		<if test="updateDate!= null and updateDate!= ''"> 
+			AND UPDATE_DATE=str_to_date(#{updateDate},'%Y-%m-%d %H:%i:%s')
+		</if>
+	</sql>
+	
+	<insert id="save" useGenerateKeys="true" keyProperty="taskExceptionOid" parameterType="BatchTaskExceptionLog">
+		<![CDATA[ INSERT INTO t_batch_task_exception_log ( ]]>
+		<include refid="commonColumnsNotPK"/>
+		<![CDATA[
+			) VALUES ( 
+			 #{taskOid}
+			, #{exceptionMessage}
+			, #{exceptionStackMessage}
+			, #{createBy}
+			, now()
+			, #{updateBy}
+			, now()
+  ) ]]>
+	</insert>
+	<update id="update" parameterType="BatchTaskExceptionLog">
+		<![CDATA[ UPDATE t_batch_task_exception_log SET 
+			 TASK_EXCEPTION_OID=#{taskExceptionOid} 
+			, TASK_OID=#{taskOid} 
+			, EXCEPTION_MESSAGE=#{exceptionMessage} 
+			, EXCEPTION_STACK_MESSAGE=#{exceptionStackMessage} 
+			, CREATE_BY=#{createBy} 
+			, CREATE_DATE=now()
+			, UPDATE_BY=#{updateBy} 
+			, UPDATE_DATE=now()
+		WHERE TASK_EXCEPTION_OID = #{taskExceptionOid}  ]]>
+	</update>
+	<delete id="deleteByPK" parameterType="java.lang.Long">
+		<![CDATA[ DELETE FROM t_batch_task_exception_log WHERE TASK_EXCEPTION_OID = #{taskExceptionOid}  ]]>
+	</delete>
+	<delete id="deleteByPKeys" parameterType="map">
+		DELETE FROM t_batch_task_exception_log WHERE
+		<foreach collection="primaryKeys" index="index" item="id"
+			open=" TASK_EXCEPTION_OID IN(" separator="," close=") ">
+			${id}
+		</foreach>
+	</delete>
+	<delete id="deleteByProperty" parameterType="BatchTaskExceptionLog">
+		DELETE FROM t_batch_task_exception_log WHERE 1 = 1
+		<include refid="commonCondition"/>
+	</delete>
+	<select id="getByPK" parameterType="java.lang.Long" resultMap="BatchTaskExceptionLogResultMapper">
+		<![CDATA[ SELECT ]]>
+			 <include refid="commonProcessDateColumns"/>
+		FROM t_batch_task_exception_log WHERE TASK_EXCEPTION_OID = #{taskExceptionOid}  
+	</select>
+	<select id="list" resultMap="BatchTaskExceptionLogResultMapper">
+		<![CDATA[ SELECT ]]>
+			 <include refid="commonProcessDateColumns"/>
+ 		FROM t_batch_task_exception_log
+	</select>
+	<select id="listByProperty" parameterType="BatchTaskExceptionLog" resultMap="BatchTaskExceptionLogResultMapper">
+		<![CDATA[ SELECT ]]>
+			<include refid="commonProcessDateColumns"/>
+		FROM t_batch_task_exception_log WHERE 1=1 
+		<include refid="commonCondition"/>
+	</select>
+	<select id="listPaginationByProperty" parameterType="BatchTaskExceptionLog" resultMap="BatchTaskExceptionLogResultMapper">
+		SELECT 
+		<include refid="commonProcessDateColumns"/>
+		FROM t_batch_task_exception_log WHERE 1=1 
+		<include refid="commonCondition"/>
+	</select>
+	<select id="findByCount" parameterType="BatchTaskExceptionLog" resultType="int">
+		SELECT count(1) AS totalcount FROM t_batch_task_exception_log WHERE 1=1 
+		<include refid="commonCondition"/>
+	</select>
+</mapper>
