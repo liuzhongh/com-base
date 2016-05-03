@@ -13,7 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>base-batch-rest</module>
-        <module>base-batch-web</module>
+        <!--<module>base-batch-web</module>-->
     </modules>
 
 
