@@ -8,7 +8,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.Assert;
 
 /**
- * Created by qianjia on 2016/3/21.
+ * Created by Liuzh on 2016/3/21.
  */
 public class RestGeneralMain {
     public static void main(String[] args) throws Exception {
