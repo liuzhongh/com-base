@@ -131,7 +131,7 @@
 		</if>
 	</sql>
 	
-	<insert id="save" useGenerateKeys="true" keyProperty="taskOid" parameterType="BatchTask">
+	<insert id="save" useGeneratedKeys="true" keyProperty="taskOid" parameterType="BatchTask">
 		<![CDATA[ INSERT INTO t_batch_task ( ]]>
 		<include refid="commonColumnsNotPK"/>
 		<![CDATA[

@@ -116,8 +116,8 @@
 			AND UPDATE_DATE=str_to_date(#{updateDate},'%Y-%m-%d %H:%i:%s')
 		</if>
 	</sql>
-	
-	<insert id="save" useGenerateKeys="true" keyProperty="jobLogOid" parameterType="BatchJobLog">
+
+	<insert id="save" useGeneratedKeys="true" keyProperty="jobLogOid" parameterType="BatchJobLog">
 		<![CDATA[ INSERT INTO t_batch_job_log ( ]]>
 		<include refid="commonColumnsNotPK"/>
 		<![CDATA[

@@ -89,7 +89,7 @@
 		</if>
 	</sql>
 	
-	<insert id="save" useGenerateKeys="true" keyProperty="taskExceptionOid" parameterType="BatchTaskExceptionLog">
+	<insert id="save" useGeneratedKeys="true" keyProperty="taskExceptionOid" parameterType="BatchTaskExceptionLog">
 		<![CDATA[ INSERT INTO t_batch_task_exception_log ( ]]>
 		<include refid="commonColumnsNotPK"/>
 		<![CDATA[

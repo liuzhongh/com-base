@@ -89,7 +89,7 @@
 		</if>
 	</sql>
 	
-	<insert id="save" useGenerateKeys="true" keyProperty="batchSysParameterOid" parameterType="BatchSysParameter">
+	<insert id="save" useGeneratedKeys="true" keyProperty="batchSysParameterOid" parameterType="BatchSysParameter">
 		<![CDATA[ INSERT INTO t_batch_sys_parameter ( ]]>
 		<include refid="commonColumnsNotPK"/>
 		<![CDATA[

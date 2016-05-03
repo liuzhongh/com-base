@@ -180,7 +180,7 @@
 		</if>
 	</sql>
 	
-	<insert id="save" useGenerateKeys="true" keyProperty="jobOid" parameterType="BatchJob">
+	<insert id="save" useGeneratedKeys="true" keyProperty="jobOid" parameterType="BatchJob">
 		<![CDATA[ INSERT INTO t_batch_job ( ]]>
 		<include refid="commonColumnsNotPK"/>
 		<![CDATA[
