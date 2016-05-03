@@ -35,15 +35,12 @@
     </appenders>
     <loggers>
         <!-- 3rdparty Loggers -->
-        <logger name="org.springframework" level="debug">
+        <logger name="org.springframework" level="info">
         </logger>
-        <logger name="com.core" level="info">
+        <logger name="com.rest" level="info">
         </logger>
-        <!-- Game Stat  logger -->
-        <!--<logger name="com.u9.global.service.log" level="info"
-                additivity="false">
-            <appender-ref ref="ProductLog"/>
-        </logger>-->
+        <logger name="com.alibaba" level="info"/>
+        <logger name="com.alibaba.druid" level="info"/>
         <!-- Root Logger -->
         <root level="ERROR">
             <!--<appender-ref ref="DevLog"/>-->
